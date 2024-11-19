@@ -4,7 +4,7 @@ public class Mandelbrot {
     private static final int MAX = 250;
     // Constant class field to determine how many itterations each point should make, higher value = higher accuracy and longer process time.
 
-    private static final int GRIDSIZE = 100;
+    private static final int GRIDSIZE = 1000;
     // Constant class field determining how many fields the < sidelength > by < sidelength > matrix should be split into. 
 
     private static double sidelength;
