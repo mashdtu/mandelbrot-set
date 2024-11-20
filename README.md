@@ -53,9 +53,9 @@ public double getIm() {
 
 For arithmetics, the class contains three methods: `abs()`, `plus (Complex other)` and `times (Complex other)`. These are all simple adaptations of the mathematical operations for the absolute value of a complex number, sum of two complex numbers and product of two complex numbers.
 
-1. $\text{abs} (C) = \text{abs} (a + b \ i) = \sqrt{a^2 + b^2}$.
-2. $C_1 + C_2 = (a + b \ i) + (c + d \ i) = (a + c) + (b + d) \ i$.
-3. $C_1 \times C_2 = (a + b \ i) \ (c + d \ i) = (a \ c - b \ d) + (b \ c + a \ d) \ i$.
+1. $\ \ \text{abs} (C) = \text{abs} (a + b \ i) = \sqrt{a^2 + b^2}$.
+2. $\ \ C_1 + C_2 = (a + b \ i) + (c + d \ i) = (a + c) + (b + d) \ i$.
+3. $\ \ C_1 \times C_2 = (a + b \ i) \ (c + d \ i) = (a \ c - b \ d) + (b \ c + a \ d) \ i$.
 
 ```Java
 public double abs () {
