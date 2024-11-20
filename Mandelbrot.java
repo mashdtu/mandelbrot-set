@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Mandelbrot {
-    private static final int MAX = 512;
+    private static final int MAX = 256;
     // Constant class field to determine how many itterations each point should make, higher value = higher accuracy and longer process time.
 
-    private static final int GRIDSIZE = 1000;
+    private static final int GRIDSIZE = 512;
     // Constant class field determining how many fields the < sidelength > by < sidelength > matrix should be split into. 
 
     private static final String COLOURS_PATH = "mnd/mandel.mnd";
@@ -27,11 +27,32 @@ public class Mandelbrot {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        double[] args_double = Arrays.stream(args).mapToDouble(Double::parseDouble).toArray();
-        // Convert type String[] args to type double[] args_double.
+        double[] args_double = new double[3];
+        // Declare an array < args_double > with dimension 3.
+        try {
+            args_double = Arrays.stream(args).mapToDouble(Double::parseDouble).toArray();
+            // Convert type String[] args to type double[] args_double.
+
+        } catch (Exception e) {
+            System.out.println("Error: The program should be called with 3 numeric values.");
+            // Print an error message if the conversion fails.
+
+            System.exit(-1);
+            // Exit the program with code -1.
+        }
 
         center = new Complex(args_double[0], args_double[1]);
         // Define a complex number which acts as the fractal's center-point in the complex number plane.
+
+        if (args_double[2] <= 0) {
+            // Test if the sidelength argument is less than or equal to 0, i.e. if the sidelength is negative or equal to 0.
+
+            System.out.println("Error: The sidelength argument must be greater than 0.");
+            // Print an error message if the sidelength is negative or equal to 0.
+
+            System.exit(-1);
+            // Exit the program with code -1.
+        }
 
         sidelength = args_double[2];
         // Define a sidelength to generate the fractal.
@@ -112,8 +133,34 @@ public class Mandelbrot {
     }
  
     private static Color[] getColourScheme (String path) throws FileNotFoundException {
+        if (path.length() == 0) {
+            // Test if the path argument is empty.
+
+            System.out.println("Error: Colour scheme path is empty.");
+            // Print an error message if the PATH is not found.
+
+            System.exit(-1);
+            // Exit the program with code -1.
+        }
+
         File origin = new File(path);
         // A File object < origin > is instantiated using the path argument.
+
+        if (!origin.exists() || origin.isDirectory()) {
+            // Check if origin file either does not exist or is a directory.
+
+            System.out.println("Error: Colour scheme for path \"" + origin.getAbsolutePath() + "\" could not be located.");
+            // If the origin file does not exist, the colour scheme cannot be located.
+
+            if ("C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0".equals(System.getProperty("user.dir"))) {
+                // Check if the current working directory is the powershell directory.
+
+                System.out.println("NOTE: The program is currently being executed from the \"" + System.getProperty("user.dir") + "\" working directory, which likely does not contain the mnd directory.");
+                // If the program is being run from the powershell directory (as VSCode usually does), the mnd directory likely will not be found because it does not exist in the powershell directory.
+                // The program should be run from the parent directory of the MandelBrot.java file to avoid errors in locating the .mnd colour scheme file.
+            }
+            System.exit(-1);
+        }
 
         Scanner input = new Scanner(origin);
         // A Scanner object < input > is instantiated using the origin file.
