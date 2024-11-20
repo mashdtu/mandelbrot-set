@@ -95,6 +95,7 @@ public class Mandelbrot {
         // Clear any preexisting objects on the StdDraw canvas.
 
         Color[] colourScheme = getColourScheme(COLOURS_PATH);
+        // The colour scheme is defined as the return value of the getColourScheme method with the path of the .mnd file as the argument.
 
         StdDraw.show(0);
         // The code to render out the points is wrapped around two "StdDraw.show(0)" commands, which makes the StdDraw library render it all out before showing anything visually - then showing all the rendered points at once.
