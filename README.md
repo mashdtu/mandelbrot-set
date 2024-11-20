@@ -3,6 +3,12 @@
 Program used to visually approximate fractals in the Mandelbrot set using complex numbers.
 
 
+## Problem
+
+
+## Description
+
+
 ## Installation
 
 
