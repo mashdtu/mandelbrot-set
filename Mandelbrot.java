@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Mandelbrot {
-    private static final int MAX = 255;
+    private static final int MAX = 512;
     // Constant class field to determine how many itterations each point should make, higher value = higher accuracy and longer process time.
 
     private static final int GRIDSIZE = 1000;
@@ -13,6 +13,8 @@ public class Mandelbrot {
 
     private static final String COLOURS_PATH = "mnd/mandel.mnd";
     // Constant class field acting as the path to the .mnd file containing the render colours.
+    // NOTE: Make sure the program is run from the correct PATH in the console, otherwise the .mnd file path will not be found.
+    // NOTE: The .mnd file can have any amount of colours, it does not need to be 256, the program will scale the colour scheme accordingly.
 
     private static double sidelength;
     // Class field for the sidelength of the fractal.
@@ -88,6 +90,8 @@ public class Mandelbrot {
     }
 
     private static Color getCoordinateColour (Color[] CS, Complex C) {
+        // *CS = Colour Scheme
+
         double range = (double) (MAX) / (double) CS.length;
         // Determine a value range, equal to the ratio between the value MAX and the number of entires in the colour scheme.
 
@@ -95,45 +99,78 @@ public class Mandelbrot {
         // Determine if C lies within the fractal using the iterate method, the numeric return value is used to colour the points based on how close algorithmically they are to being inside the fractal (the bigger the return value - the closer the point lies).
 
         for (int i = 1; i < CS.length; i++) {
-            if (i * range > iteratorValue) {
+            // For loop with iterator ranging from 1 to the index of the last colour in the colour scheme.
+
+            if (i * range >= iteratorValue) {
                 return CS[i-1];
+                // If the iterator * the range is greater than the returned value from the iterator, the index of the iterator minus one of the colour scheme is returned. One is subtracted from the iterator to avoid having a case where i = 0, for which the statement i * range > iteratorValue would always return false.
             }
         }
 
         return CS[CS.length - 1];
+        // Due to the subtraction of the iterator with 1, i * range may never exceede iteratorValue in cases where MAX is returned from the iterate() method. To fix this issue, the last element in the colour scheme is returned, if the iteratorValue exceeds (CS.length - 1) * range.
     }
  
     private static Color[] getColourScheme (String path) throws FileNotFoundException {
         File origin = new File(path);
+        // A File object < origin > is instantiated using the path argument.
+
         Scanner input = new Scanner(origin);
+        // A Scanner object < input > is instantiated using the origin file.
 
         int fileLength = 0;
         Scanner lineCounter = new Scanner(origin);
+        // An integer < fileLength > is declared and set equal to 0, and a new Scanner object < lineCounter > is instantiated with the same arguments as < input >. These two are used to count the number of lines in the .mnd file, such that the colour palette array can be declared using the correct dimensions.
 
         while (lineCounter.hasNext()) {
             fileLength += lineCounter.nextLine().length() != 0 ? 1 : 0;
+            // The integer fileLength is iterated by 1, each time there is a non-empty line in the .mnd file.
         }
+
         lineCounter.close();
+        // The < lineCounter > Scanner is closed to avoid any potential resource leaks.
 
         Color[] colours = new Color[fileLength];
+        // The colour palette is declared as a array using fileLength (the no. of lines in the .mnd file) as the dimension.
 
         for (int i = 0; i < fileLength; i++) {
-            String[] s = input.nextLine().split(" ");
-            String[] s2 = new String[3];
-            int iterator = 0;
+            // For an index i spanning from 0 to fileLength, i.e. for each line in the origin file.
 
-            for (int j = 0; j < s.length; j++) {
-                if (!"".equals(s[j]) && iterator < 3) {
-                    s2[iterator] = s[j];
+            String[] rawLine = input.nextLine().split(" ");
+            // Set a string array < rawLine > as the line in the < input > scanner split at each whitespace.
+
+            String[] rgbValues = new String[3];
+            // Declare a new string array with dimension 3, i.e. 3 indices (R, G and B).
+
+            int iterator = 0;
+            // Set an iterator equal to 0 to determine which index in < rgbValues > to write to.
+
+            for (String s : rawLine) {
+                // For each string < s > in the rawLine string array.
+
+                if (!"".equals(s) && iterator < 3) {
+                    // If < s > is not an empty string it should be ignored, likewise if the iterator is above 2, the program will have already written 3 colour values to < rgbValues >, and as such < s > should be ignored.
+
+                    rgbValues[iterator] = s;
+                    // If the case passes the if-statement, < s > must be a numeric value from the .mnd file, which should range from 0 to 255. It is added to the rgbValues array at index < iterator >.
+
                     iterator ++;
+                    // The iterator is iterated :)
                 }
             }
+            
+            int[] rgbInt = Arrays.stream(rgbValues).mapToInt(Integer::parseInt).toArray();
+            // Type String[] rgbValues is converted to type int[] rgbInt.
 
-            colours[i] = new Color(Integer.parseInt(s2[0]), Integer.parseInt(s2[1]), Integer.parseInt(s2[2]));
+            colours[i] = new Color(rgbInt[0], rgbInt[1], rgbInt[2]);
+            // The colour at index < i > in the colour scheme array is set equal to a colour object declared using the fetched RGB values.
         }
+
         input.close();
+        // The < input > Scanner is closed to avoid any potential resource leaks.
 
         return colours;
+        // The dummy colour scheme array < colours > is returned. 
     }
 
     private static int iterate (Complex z0) {
