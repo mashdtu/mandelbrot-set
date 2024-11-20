@@ -79,7 +79,7 @@ public class Mandelbrot {
 
                 double x0 = center.getRe() - (double) sidelength / 2.0 + (double) (sidelength * x) / ((double) GRIDSIZE - 1);
                 double y0 = center.getIm() - (double) sidelength / 2.0 + (double) (sidelength * y) / ((double) GRIDSIZE - 1);
-                // Use expression (1) as described in the documentation to determine the coordinates (x0 and y0) of the center-point of the specific (x, y) sub-grid.
+                // Using the expression as described in the documentation, the coordinates (x0 and y0) of the specific (x, y) point are determined.
                 
                 coordinates[x][y] = new Complex(x0, y0);
                 // Write the value of the calculated coordinates to the grid as a complex number object.
@@ -130,7 +130,7 @@ public class Mandelbrot {
         }
 
         return CS[CS.length - 1];
-        // Due to the subtraction of the iterator with 1, i * range may never exceede iteratorValue in cases where MAX is returned from the iterate() method. To fix this issue, the last element in the colour scheme is returned, if the iteratorValue exceeds (CS.length - 1) * range.
+        // Due to the subtraction of the iterator by 1, i * range may never exceede iteratorValue in cases where MAX is returned from the iterate() method. To fix this issue, the last element in the colour scheme is returned, if the iteratorValue exceeds (CS.length - 1) * range.
     }
  
     private static Color[] getColourScheme (String path) throws FileNotFoundException {

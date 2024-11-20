@@ -185,10 +185,141 @@ input.close();
 return colours;
 ```
 
+The `getCoordinateColour` method takes a `Color[] CS` and a `Complex C` as the arguments. Note that `CS` stands for Colour Scheme. A `double range` is defined as the ratio between the class constant `MAX` and the length of the argument `CS`, i.e. `CS.length`. This value is used to map return values of the `iterate` method to colours, regardless of how many colours are given in the `.mnd` colour scheme file. An `int iteratorValue` is defined as the return value from the `iterate` method called with `C` as the argument.
+```Java
+double range = (double) (MAX) / (double) CS.length;
+int iteratorValue = iterate(C);
+```
+A loop is then started with an index `i` spanning from 1 to `CS.length`. For each value `i`, if `iteratorValue` is less than or equal to `i` $\times$ `range`, i.e. if `iteratorValue` falls within the `i`$^\text{th}$ index of the colour palette, the index `iteratorValue` of the colour scheme `CS` is returned. 1 is subtracted from `iteratorValue` to avoid having a case where `i` $= 0$, for which the statement (`i` $\times$ `range`) > `iteratorValue` would always return false. Due to the subtraction of 1 from `iteratorValue`, `i` $\times$ `range` may never exceede `iteratorValue` in cases where `MAX` is returned from the `iterate` method. To fix this issue the last element in `CS` is returned, i.e. `CS[CS.length-1]`, if `iteratorValue` exceeds (`CS.length` $- 1$) $\times$ `range`.
+```Java
+for (int i = 1; i < CS.length; i++) {
+    if (i * range >= iteratorValue) {
+        return CS[i-1];
+    }
+}
+
+return CS[CS.length - 1];
+```
+
+The `draw` method takes a `Complex[][] G` as the argument, and uses the external `StdDraw.java` library to create a visual representation of the calculations, which ends sketching out an appoximation of the fractal shape. The method begins by clearing any preexisting objects on the canvas and then defining a new `Color[] colourScheme` as the return value of the `getColourScheme` method with the class constant `COLOURS_PATH` as the argument.
+```Java
+StdDraw.clear();
+Color[] colourScheme = getColourScheme(COLOURS_PATH);
+```
+
+The following code to render out the canvas is wrapped around two `StdDraw.show(0)` commands to make the entire render show on the canvas at once, which radically speeds up processing time. The actual code to render out the approximation consists of two for loops of respectively `x` and `y`, where they both span from 0 to the class constant `GRIDSIZE`. For each repitition of the inner loop, the pen colour for the `StdDraw.java` library is set using the `StdDraw.setPenColor` method with the return value of `getCoordinateColour(colourScheme, G[x][y])` as the argument. The point $(x, y)$ is now filled using the new pen colour.
+```Java
+StdDraw.show(0);
+
+for (int x = 0; x < GRIDSIZE; x++) {
+    for (int y = 0; y < GRIDSIZE; y++) {
+        StdDraw.setPenColor(getCoordinateColour(colourScheme, G[x][y]));
+        StdDraw.point(x, y);
+    }
+}
+
+StdDraw.show(0);
+```
+
+The last non-`main` method is the `determineMatrixCoordinates` method, which determines a twodimensional matrix of the complex coordinates of each point in the grid. The method does not take any arguments. First a `Complex[][] coordinates` dummy matrix is defined with size `GRIDSIZE` $\times$ `GRIDSIZE`. A twodimensional loop is then started for `x` and `y`, spanning from 0 to `GRIDSIZE`. Two `double` values `x0` and `y0` are then calculated using the expression. Note that `center` is the class field for the complex center-point of the grid.
+
+$$
+    \begin{pmatrix}
+        x_0 \\ y_0
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \Re \ (C) - \frac{S}{2} + \frac{S \times x}{G - 1} \\
+        \Im \ (C) - \frac{S}{2} + \frac{S \times y}{G - 1}
+    \end{pmatrix}
+$$
+
+A complex number instantiated using `x0` and `y0` as the arguments, and written to the `coordinates` array at position `[x][y]`, and the loop is repeated until all the complex coordinates are written to `coordinates`. The new `coordinates` array is then returned.
+```Java
+Complex[][] coordinates = new Complex[GRIDSIZE][GRIDSIZE];
+
+for (int x = 0; x < GRIDSIZE; x++) {
+    for (int y = 0; y < GRIDSIZE; y++) {
+        double x0 = center.getRe() - (double) sidelength / 2.0 + (double) (sidelength * x) / ((double) GRIDSIZE - 1);
+        double y0 = center.getIm() - (double) sidelength / 2.0 + (double) (sidelength * y) / ((double) GRIDSIZE - 1);
+        coordinates[x][y] = new Complex(x0, y0);
+    }
+}
+
+return coordinates;
+```
+
+The `main` method itself has to be called with three numbers as the arguments, i.e. the program should be initiated with:
+
+>java Mandelbrot.java $a$ $b$ $c$
+
+where $a$, $b$ and $c$ are decimal numbers representing the following.
+
+- $a$ : The **real** part of the complex center point.
+- $b$ : The **imaginary** part of the complex center point.
+- $c$ : The sidelength of the visible square.
+
+The `main` method starts by declaring a `double[] args_double` with size 3 and then, using a try-catch block, attempts to parse the `String[] args` given from the console as `double` values. I.e. type `String[]` is converted to type `double[]` and stored in `args_double`. If the conversion fails, the program notifices the user that there is an error with the given arguments, and that the program should be called with 3 numeric values before terminating with code -1.
+```Java
+double[] args_double = new double[3];
+
+try {
+    args_double = Arrays.stream(args).mapToDouble(Double::parseDouble).toArray();
+
+} catch (Exception e) {
+    System.out.println("Error: The program should be called with 3 numeric values.");
+    System.exit(-1);
+}
+```
+
+If the conversion suceedes the method continues, and the class field `center` is assigned a complex number instantiated using $a$ and $b$ as arguments.
+```Java
+center = new Complex(args_double[0], args_double[1]);
+```
+
+The method then checks, if $c$ is greater than 0. If $c$ is not greater than 0, the program notifies the user that the sidelength argument must be greater than 0, and the program is terminated with code -1. If $c$ is greater than 0, the class field `sidelength` is assigned the value of $c$. 
+```Java
+if (args_double[2] <= 0) {
+    System.out.println("Error: The sidelength argument must be greater than 0.");
+    System.exit(-1);
+}
+
+sidelength = args_double[2];
+```
+
+The scales and pen radius used by the `StdDraw.java` library are set using the void methods `setXscale`, `setYscale` and `setPenRadius` from the library.
+```Java
+StdDraw.setXscale(0, GRIDSIZE);
+StdDraw.setYscale(0, GRIDSIZE);
+StdDraw.setPenRadius(0.8/(double)GRIDSIZE);
+```
+
+The class field `grid` is then assigned the return value from calling the `determineMatrixCoordinates` method, and finally the `draw` method is called with `grid` as the argument to generate the final render.
+```Java
+grid = determineMatrixCoordinates();
+draw(grid);
+```
+
+Furthermore, the class makes use of the following packages.
+```Java
+import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+```
 
 
 
-The `getCoordinateColour` method takes a `Color[] CS` and a `Complex C` as the arguments. 
+## Efficiency
+
+### Processing time
+
+
+
+
+### Memory usage
+
 
 
 
