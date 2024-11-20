@@ -34,8 +34,8 @@ public class Mandelbrot {
         sidelength = args_double[2];
         // Define a sidelength to generate the fractal.
 
-        StdDraw.setXscale(-1, GRIDSIZE);
-        StdDraw.setYscale(-1, GRIDSIZE);
+        StdDraw.setXscale(0, GRIDSIZE);
+        StdDraw.setYscale(0, GRIDSIZE);
         StdDraw.setPenRadius(0.8/(double)GRIDSIZE);
         // Set dimensions and pen radius for the stdDraw library for use in visually representing the grid.
 
