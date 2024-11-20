@@ -256,8 +256,9 @@ return coordinates;
 ```
 
 The `main` method itself has to be called with three numbers as the arguments, i.e. the program should be initiated with:
-
->java Mandelbrot.java $a$ $b$ $c$
+```bash
+java Mandelbrot.java a b c
+```
 
 where $a$, $b$ and $c$ are decimal numbers representing the following.
 
