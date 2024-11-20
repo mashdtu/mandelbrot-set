@@ -196,10 +196,10 @@ The `getCoordinateColour` method takes a `Color[] CS` and a `Complex C` as the a
 double range = (double) (MAX) / (double) CS.length;
 int iteratorValue = iterate(C);
 ```
-A loop is then started with an index `i` spanning from 1 to `CS.length`. For each value `i`, if `iteratorValue` is less than or equal to `i` $\times$ `range`, i.e. if `iteratorValue` falls within the `i`$^\text{th}$ index of the colour palette, the index `iteratorValue` of the colour scheme `CS` is returned. 1 is subtracted from `iteratorValue` to avoid having a case where `i` $= 0$, for which the statement (`i` $\times$ `range`) > `iteratorValue` would always return false. Due to the subtraction of 1 from `iteratorValue`, `i` $\times$ `range` may never exceede `iteratorValue` in cases where `MAX` is returned from the `iterate` method. To fix this issue the last element in `CS` is returned, i.e. `CS[CS.length-1]`, if `iteratorValue` exceeds (`CS.length` $- 1$) $\times$ `range`.
+A loop is then started with an index `i` spanning from 1 to `CS.length`. For each value `i`, if `iteratorValue` is less than `i` $\times$ `range`, i.e. if `iteratorValue` falls within the `i`$^\text{th}$ index of the colour palette, the index `iteratorValue` of the colour scheme `CS` is returned. 1 is subtracted from `iteratorValue` to avoid having a case where `i` $= 0$, for which the statement (`i` $\times$ `range`) > `iteratorValue` would always return false. Due to the subtraction of 1 from `iteratorValue`, `i` $\times$ `range` may never exceede `iteratorValue` in cases where `MAX` is returned from the `iterate` method. To fix this issue the last element in `CS` is returned, i.e. `CS[CS.length-1]`, if `iteratorValue` exceeds (`CS.length` $- 1$) $\times$ `range`.
 ```Java
 for (int i = 1; i < CS.length; i++) {
-    if (i * range >= iteratorValue) {
+    if (i * range > iteratorValue) {
         return CS[i-1];
     }
 }
@@ -319,12 +319,46 @@ import java.util.Scanner;
 
 ## Efficiency
 
+### Memory usage
+
+To determine the program's memory usage the `Runtime.getRuntime().totalMemory` method is used. As the method returns a `long` value equal to the amount of bits of memory the program has used. To convert the memory to megabytes (MB), the `long` value is divided by 1,000,000. As such, to measure the memory usage the following command is added on the end of the `main` method.
+```Java
+System.out.println("Memory usage: " + (double) (Runtime.getRuntime().totalMemory())/1000000 + " MB.");
+```
+
+By running the program 10 times using the starting arguments `-0.5 0 2`, a decent approximation of the program's average memory usage for the arguments `-0.5 0 2` can be determined. Note that all measurements are made with the default values `MAX = 256`, `GRIDSIZE = 512` and with the colour scheme `mandel.mnd`.
+```
+Memory usage: 318.767104 MB
+Memory usage: 444.596224 MB
+Memory usage: 402.653184 MB
+Memory usage: 385.875968 MB
+Memory usage: 419.4304 MB
+Memory usage: 408.94464 MB
+Memory usage: 322.961408 MB
+Memory usage: 402.653184 MB
+Memory usage: 421.527552 MB
+Memory usage: 408.94464 MB
+```
+The mean memory usage is calculated to be 393.635 MB for the arguments `-0.5 0 2`. Note that the memory usage can vary, depending on what arguments `Mandelbrot.java` is called with. As an example the memory usage can be calculated when the program is called with arguments `-1 0.3 0.05`.
+```
+Memory usage: 373.293056 MB
+Memory usage: 358.612992 MB
+Memory usage: 392.167424 MB
+Memory usage: 394.264576 MB
+Memory usage: 318.767104 MB
+Memory usage: 383.778816 MB
+Memory usage: 373.293056 MB
+Memory usage: 318.767104 MB
+Memory usage: 371.195904 MB
+Memory usage: 387.973120 MB
+```
+The mean mamory usage is calculated to be 367.211 MB when the program is called with the arguments `-1 0.3 0.05`.
+
+
+
+
 ### Processing time
 
-
-
-
-### Memory usage
 
 
 

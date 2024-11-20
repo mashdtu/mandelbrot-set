@@ -11,7 +11,7 @@ public class Mandelbrot {
     private static final int GRIDSIZE = 512;
     // Constant class field determining how many fields the < sidelength > by < sidelength > matrix should be split into. 
 
-    private static final String COLOURS_PATH = "mnd/mandel.mnd";
+    private static final String COLOURS_PATH = "mnd/blues.mnd";
     // Constant class field acting as the path to the .mnd file containing the render colours.
     // NOTE: Make sure the program is run from the correct PATH in the console, otherwise the .mnd file path will not be found.
     // NOTE: The .mnd file can have any amount of colours, it does not need to be 256, the program will scale the colour scheme accordingly.
@@ -27,6 +27,13 @@ public class Mandelbrot {
 
 
     public static void main(String[] args) throws FileNotFoundException {
+        //long t1, t2;
+
+        //Runtime runtime = Runtime.getRuntime();
+        //long usedMemoryBefore = runtime.totalMemory() - runtime.freeMemory();
+
+        //t1 = System.nanoTime();
+
         double[] args_double = new double[3];
         // Declare an array < args_double > with dimension 3.
         try {
@@ -67,6 +74,13 @@ public class Mandelbrot {
 
         draw(grid);
         // Draw the points of the matrix which fall within the mandelbrot set, determined using the iterate() method.
+
+        
+        //t2 = System.nanoTime();
+
+        System.out.println("Memory usage: " + (double) (Runtime.getRuntime().totalMemory())/1000000 + " MB.");
+
+        //System.out.println("Execution time: " + (t2 - t1) / 1000000 + "ms");
     }
 
     private static Complex[][] determineMatrixCoordinates () {
@@ -123,7 +137,7 @@ public class Mandelbrot {
         for (int i = 1; i < CS.length; i++) {
             // For loop with iterator ranging from 1 to the index of the last colour in the colour scheme.
 
-            if (i * range >= iteratorValue) {
+            if (i * range > iteratorValue) {
                 return CS[i-1];
                 // If the iterator * the range is greater than the returned value from the iterator, the index of the iterator minus one of the colour scheme is returned. One is subtracted from the iterator to avoid having a case where i = 0, for which the statement i * range > iteratorValue would always return false.
             }
