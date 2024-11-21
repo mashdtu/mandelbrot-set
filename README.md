@@ -11,7 +11,7 @@ $$
     z_2 = (z_1)^2 + z_0 \\
     z_3 = (z_2)^2 + z_0 \\
     z_4 = (z_3)^2 + z_0 \\
-    \vdots \phantom{= (z_4)^2 + z_0}
+    \vdots
 $$
 
 It can be said that a complex number $z_0$ is **not** contained in the Mandelbrot set, if the sequence $|z_1|$, $|z_2|$, $|z_3|$, $|z_4|$, $\dots$ goes towards infinity. I.e. if the numbers keep increasing. It can be assumed, that if any $|z_n| > 2$, the sequence **will always** keep increasing, meaning that the complex number $z_0$ is **not** contained in the set. If the absolute values of none of the numbers in the sequence ever exceed 2, the original number $z_0$ *likely* is contained in the set. Using this definition a number $k$ can be decided, such that the algorithm gives a sequence of size $k - 1$, i.e. the sequence goes from $z_0$ to $z_k$. The number $k$ then represents the likelyhood that any $z_0$ is contained by the set.
