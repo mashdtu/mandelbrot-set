@@ -4,6 +4,25 @@ Program used to visually approximate fractals in the Mandelbrot set using comple
 
 
 ## Problem
+The Mandelbrot set cannot be described using a single mathematical equation. It is instead defined by an algorithm and should thus be calculated primarily using a computer. The rule to determine if a complex number $z_0$ lies within the Mandelbrot set is as follows.
+
+$$
+    z_1 = (z_0)^2 + z_0 \\
+    z_2 = (z_1)^2 + z_0 \\
+    z_3 = (z_2)^2 + z_0 \\
+    z_4 = (z_3)^2 + z_0 \\
+    \vdots \phantom{= (z_4)^2 + z_0}
+$$
+
+It can be said that a complex number $z_0$ is **not** contained in the Mandelbrot set, if the sequence $|z_1|$, $|z_2|$, $|z_3|$, $|z_4|$, $\dots$ goes towards infinity. I.e. if the numbers keep increasing. It can be assumed, that if any $|z_n| > 2$, the sequence **will always** keep increasing, meaning that the complex number $z_0$ is **not** contained in the set. If the absolute values of none of the numbers in the sequence ever exceed 2, the original number $z_0$ *likely* is contained in the set. Using this definition a number $k$ can be decided, such that the algorithm gives a sequence of size $k - 1$, i.e. the sequence goes from $z_0$ to $z_k$. The number $k$ then represents the likelyhood that any $z_0$ is contained by the set.
+
+1. How can a Java class be written to represent a complex number $z_0$.
+
+2. How can this algorithm be implemented in a Java program to visually render the mandelbrot set in the complex number plane.
+
+3. How can the program be expanded to generate multi-coloured renders, depending on how *likely* a complex number is to be contained in the set.
+
+4. How can the colours be loaded from a preexisting .mnd file and applied to the render.
 
 
 ## Description
@@ -227,7 +246,7 @@ for (int x = 0; x < GRIDSIZE; x++) {
 StdDraw.show(0);
 ```
 
-The last non-`main` method is the `determineMatrixCoordinates` method, which determines a twodimensional matrix of the complex coordinates of each point in the grid. The method does not take any arguments. First a `Complex[][] coordinates` dummy matrix is defined with size `GRIDSIZE` $\times$ `GRIDSIZE`. A twodimensional loop is then started for `x` and `y`, spanning from 0 to `GRIDSIZE`. Two `double` values `x0` and `y0` are then calculated using the expression. Note that `center` is the class field for the complex center-point of the grid.
+The last non-`main` method is the `determineMatrixCoordinates` method, which determines a twodimensional matrix of the complex coordinates of each point in the grid. The method does not take any arguments. First a `Complex[][] coordinates` dummy matrix is defined with size `GRIDSIZE` $\times$ `GRIDSIZE`. A twodimensional loop is then started for `x` and `y`, spanning from 0 to `GRIDSIZE`. Two `double` values `x0` and `y0` are then calculated using the expression, where $C$ is the `Complex center`, $S$ is the `double sidelength` and $G$ is the constant `int GRIDSIZE`.
 
 $$
     \begin{pmatrix}
@@ -353,14 +372,81 @@ Memory usage: 318.767104 MB
 Memory usage: 371.195904 MB
 Memory usage: 387.973120 MB
 ```
-The mean mamory usage is calculated to be 367.211 MB when the program is called with the arguments `-1 0.3 0.05`.
+The mean mamory usage is calculated to be 367.211 MB when the program is initiated with the arguments `-1 0.3 0.05`. Initiating the program with the arguments `-100 0 2` (or any other square which lies completely outside the fractal), results in a memory usage output of exactly **264.241152 MB** every time, this is the minimum memory usage for the program. On the other hand, if the square lies completely within the fractal, for instance with arguments `-0.2 0 0.0001`, the memory usage is at a maximum. The mean memory usage for arguments `-0.2 0 0.0001` is determined by running the program 10 times.
+```
+Memory usage: 685.768704 MB
+Memory usage: 694.157312 MB
+Memory usage: 765.46048 MB
+Memory usage: 664.797184 MB
+Memory usage: 639.63136 MB
+Memory usage: 681.5744 MB
+Memory usage: 715.128832 MB
+Memory usage: 731.906048 MB
+Memory usage: 704.643072 MB
+Memory usage: 725.614592 MB
+```
+The mean memory usage is calculated to be 700.868 MB. This means that the general memory usage is usually somewhere between 260 MB and 700 MB depending on the arguments the program is initiated with.
 
 
+### Runtime
 
+The program runtime $P$ can be measured using the `System.nanoTime` method, and saving the return values before and after the process. To do this two `long` variables are declared: `t1` and `t2`. First `t1` is set equal to the return value of `System.nanoTime` before the process is started. The program is then run, and `t2` is set equal to the `System.nanoTime` return value at the time the program finishes. The runtime $P$ can now be determined as the difference between `t1` and `t2`, i.e. $P = \Delta t = $ `t2` $-$ `t1`. Note that the `System.nanoTime` method returns a long value in the form of nanoseconds - not milliseconds - for this reason $\Delta t$ has to be divided by $10^6$ or 1,000,000, in order to store the runtime in milliseconds. As such method of determining the runtime is as follows:
+```Java
+long t1, t2;
+t1 = System.nanoTime();
 
-### Processing time
+...
+// Process code
+...
 
+t2 = System.nanoTime();
 
+System.out.println("Execution time: " + (t2 - t1) / 1000000 + "ms");
+```
+
+Using this method, the runtime for the program when initiated with arguments `-0.5 0 2` can be determined. Note that the program is first compiled with the command `javac Mandelbrot.java` and then run with the command `java Mandelbrot -0.5 0 2`.
+```
+Execution time: 541ms
+Execution time: 668ms
+Execution time: 575ms
+Execution time: 870ms
+Execution time: 837ms
+Execution time: 784ms
+Execution time: 859ms
+Execution time: 727ms
+Execution time: 690ms
+Execution time: 571ms
+```
+
+The mean runtime is calculated to be 712.2 ms. The mean runtime is then calculated when called with the arguments `-100 0 2`, which lies completely outside the fractal.
+```
+Execution time: 337ms
+Execution time: 401ms
+Execution time: 435ms
+Execution time: 495ms
+Execution time: 425ms
+Execution time: 426ms
+Execution time: 442ms
+Execution time: 407ms
+Execution time: 373ms
+Execution time: 422ms
+```
+
+The mean runtime is calculated to be 416.3 ms. Lastly the runtime for a square completely inside the fractal is calculated., to do this the arguments `-0.2 0 0.0001` are used.
+```
+Execution time: 828ms
+Execution time: 851ms
+Execution time: 936ms
+Execution time: 1408ms
+Execution time: 1471ms
+Execution time: 1426ms
+Execution time: 1264ms
+Execution time: 1271ms
+Execution time: 1371ms
+Execution time: 1235ms
+```
+
+The mean runtime is calculated to be 1206.1 ms. As such the general runtime will usually be between 400 ms and 1400 ms depending on the arguments the program is initiated with.
 
 
 
