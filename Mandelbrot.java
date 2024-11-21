@@ -28,11 +28,11 @@ public class Mandelbrot {
 
     public static void main(String[] args) throws FileNotFoundException {
         //long t1, t2;
-
         //Runtime runtime = Runtime.getRuntime();
         //long usedMemoryBefore = runtime.totalMemory() - runtime.freeMemory();
-
         //t1 = System.nanoTime();
+
+
 
         if (args.length != 3) {
             System.out.println("Error: The program should be called with 3 numeric values.");
@@ -84,10 +84,9 @@ public class Mandelbrot {
         // Draw the points of the matrix which fall within the mandelbrot set, determined using the iterate() method.
 
         
+
         //t2 = System.nanoTime();
-
         //System.out.println("Memory usage: " + (double) (Runtime.getRuntime().totalMemory())/1000000 + " MB.");
-
         //System.out.println("Execution time: " + (t2 - t1) / 1000000 + "ms");
     }
 
