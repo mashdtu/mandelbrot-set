@@ -11,7 +11,7 @@ public class Mandelbrot {
     private static final int GRIDSIZE = 512;
     // Constant class field determining how many fields the < sidelength > by < sidelength > matrix should be split into. 
 
-    private static final String COLOURS_PATH = "mnd/mandel.mnd";
+    private static final String COLOURS_PATH = "mnd/volcano.mnd";
     // Constant class field acting as the path to the .mnd file containing the render colours.
     // NOTE: Make sure the program is run from the correct PATH in the console, otherwise the .mnd file path will not be found.
     // NOTE: The .mnd file can have any amount of colours, it does not need to be 256, the program will scale the colour scheme accordingly.
@@ -27,12 +27,12 @@ public class Mandelbrot {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        long t1, t2;
+        //long t1, t2;
 
         //Runtime runtime = Runtime.getRuntime();
         //long usedMemoryBefore = runtime.totalMemory() - runtime.freeMemory();
 
-        t1 = System.nanoTime();
+        //t1 = System.nanoTime();
 
         if (args.length != 3) {
             System.out.println("Error: The program should be called with 3 numeric values.");
@@ -84,11 +84,11 @@ public class Mandelbrot {
         // Draw the points of the matrix which fall within the mandelbrot set, determined using the iterate() method.
 
         
-        t2 = System.nanoTime();
+        //t2 = System.nanoTime();
 
         //System.out.println("Memory usage: " + (double) (Runtime.getRuntime().totalMemory())/1000000 + " MB.");
 
-        System.out.println("Execution time: " + (t2 - t1) / 1000000 + "ms");
+        //System.out.println("Execution time: " + (t2 - t1) / 1000000 + "ms");
     }
 
     private static Complex[][] determineMatrixCoordinates () {

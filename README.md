@@ -57,8 +57,40 @@ java Mandelbrot a b c
 
 ## Application
 
+Three numeric values $a$, $b$ and $c$ are expected when the program is launched. The values $a$ and $b$ are the respectively real and imaginary coefficients of a complex number $C$. This complex number is the center-point of the render. The third value $c$ is the sidelength of the square in which the fractal is rendered, i.e. the vertical and horizontal distance from the edges of the rendered area.
+
+The program can either be initiated using the compiled solution or using the `.java` files directly. If changes are made to class fields such as `MAX`, `GRIDSIZE` or `COLOURS_PATH` the program should either be recompiled using the `javac` command, or initiated directly from the `.java` source files by using the following command.
+```
+java Mandelbrot.java a b c
+```
+
+Note that the command uses `Mandelbrot.java` instead of just `Mandelbrot`.
+
 
 ### Preview
+
+The program can be called with the arguments `-0.5 0 2` to show a decent render of the mandelbrot set as such.
+```
+java Mandelbrot -0.5 0 2
+```
+This produces the following result with respectively the `mandel.mnd` colour scheme and the `blues.mnd` colour scheme.
+
+![Result colours with the mandel colour scheme](img/-0.5%200%202%20mandel.png)
+
+![Result colours with the blues colour scheme](img/-0.5%200%202%20blues.png)
+
+To get another look at the set, the program can be initiated with the arguments `0.10684 0.63675 0.0085`. The results are coloured with respectively the `blues.mnd` colour scheme and the `volcano.mnd` colour scheme.
+```
+java Mandelbrot 0.10684 0.63675 0.0085
+```
+
+![Result colours with the mandel colour scheme](img/0.10684%200.63675%200.0085%20blues.png)
+
+![Result colours with the mandel colour scheme](img/0.10684%200.63675%200.0085%20volcano.png)
+
+
+
+
 
 
 ## Documentation
@@ -357,6 +389,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 ```
+
 
 
 
