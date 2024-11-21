@@ -7,10 +7,18 @@ Program used to visually approximate fractals in the Mandelbrot set using comple
 The Mandelbrot set cannot be described using a single mathematical equation. It is instead defined by an algorithm and should thus be calculated primarily using a computer. The rule to determine if a complex number $z_0$ lies within the Mandelbrot set is as follows.
 
 $$
-    z_1 = (z_0)^2 + z_0 \\
-    z_2 = (z_1)^2 + z_0 \\
-    z_3 = (z_2)^2 + z_0 \\
-    z_4 = (z_3)^2 + z_0 \\
+    z_1 = (z_0)^2 + z_0
+$$
+$$
+    z_2 = (z_1)^2 + z_0
+$$
+$$
+    z_3 = (z_2)^2 + z_0
+$$
+$$
+    z_4 = (z_3)^2 + z_0
+$$
+$$
     \vdots
 $$
 
