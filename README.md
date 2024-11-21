@@ -33,10 +33,25 @@ It can be said that a complex number $z_0$ is **not** contained in the Mandelbro
 4. How can the colours be loaded from a preexisting .mnd file and applied to the render.
 
 
-## Description
-
-
 ## Installation
+
+The open-source program can be accessed directly from GitHub. Before installing the program, `JDK Development Kit 23.0.1` or newer is recommended along with `java/javac version 22.0.2` or newer. To properly install make sure the preceeding steps are followed.
+
+1. Make sure appropriate versions of `java` and `JDK` are properly installed on your device.
+
+2. Make sure you have a directory containing the `MandelBrot.java`, `Complex.java` and `StdDraw.java` files, as well as the `mnd` directory.
+
+3. Open a terminal window (preferrably Command Prompt or PowerShell) and make sure the current working directory (CWD) is the same as the parent directory of the `.java` files.
+
+4. Run the following command in the terminal window in order to compile the `.java` files.
+```
+javac Mandelbrot.java
+```
+
+5. To run the compiled program use the following command, where $a$, $b$ and $c$ are numeric values.
+```
+java Mandelbrot a b c
+```
 
 
 
